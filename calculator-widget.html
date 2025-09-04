@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PowerCalc India - Widget</title>
 
-    <!-- CRITICAL FIX: Added the link to your original stylesheet -->
-    <link rel="stylesheet" href="/style.css">
+    <!-- FINAL FIX: Changed path to be relative. Looks for style.css in the same folder. -->
+    <link rel="stylesheet" href="style.css">
     
-    <!-- CRITICAL FIX: Added the missing Chart.js library -->
+    <!-- This library is loaded from a CDN, so its path is fine. -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     
-    <!-- This minimal style ensures the widget fits well in the iframe -->
     <style>
+        /* This minimal style ensures the widget fits well inside the iframe */
         body {
-            background-color: #ffffff; /* Ensures clean background inside iframe */
+            background-color: #ffffff; 
             padding: 1rem;
         }
     </style>
@@ -128,8 +128,8 @@
         </div>
     </div>
 
-    <!-- This links to your ORIGINAL, full app.js file -->
-    <script src="/app.js"></script>
+    <!-- FINAL FIX: Changed path to be relative. Looks for app.js in the same folder. -->
+    <script src="app.js"></script>
 </body>
 </html>
 
