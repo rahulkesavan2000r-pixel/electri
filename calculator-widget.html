@@ -497,7 +497,12 @@
 
         function showStep(stepNum) {
             document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
-            document.getElementById(`step-${stepNum}`).classList.remove('hidden');
+            // FIX: The results section has a different ID format.
+            if (stepNum === 'results') {
+                document.getElementById('results-section').classList.remove('hidden');
+            } else {
+                document.getElementById(`step-${stepNum}`).classList.remove('hidden');
+            }
         }
 
         function calculateBill() {
