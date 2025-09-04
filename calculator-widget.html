@@ -94,6 +94,39 @@
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
 
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .radio-option {
+            flex: 1;
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .radio-option input[type="radio"]:checked + label {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+        }
+
+
         /* Buttons */
         .btn {
             display: inline-block;
@@ -126,6 +159,17 @@
         .btn--secondary:hover {
             background-color: #5a6268;
         }
+        
+        .btn--outline {
+            background-color: transparent;
+            color: #007bff;
+            border: 2px solid #007bff;
+        }
+        .btn--outline:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
 
         .btn--full-width {
             width: 100%;
@@ -157,24 +201,37 @@
             font-size: 2.5rem;
         }
 
-        .breakdown-table {
-            width: 100%;
-            border-collapse: collapse;
+        .bill-summary {
             margin-bottom: 2rem;
         }
-        .breakdown-table th, .breakdown-table td {
-            padding: 0.8rem;
-            border-bottom: 1px solid #dee2e6;
-            text-align: left;
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
         }
-        .breakdown-table th {
-            background-color: #f8f9fa;
+
+        .summary-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .summary-value {
+            font-weight: 500;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
         }
 
         /* Calculator Container */
         .calculator-container {
             max-width: 650px;
-            margin: 2rem auto;
+            margin: 0 auto;
         }
 
     </style>
@@ -297,22 +354,24 @@
             const params = new URLSearchParams(window.location.search);
             const stateCodeFromUrl = params.get('state');
             
+            // The init() function will now be called after this block,
+            // so we can reliably get the stateSelect element.
+            init(); 
+            
             if (stateCodeFromUrl) {
                 const stateSelect = document.getElementById('state-select');
                 const stateSelectionGroup = document.getElementById('state-selection-group');
                 
-                // Use a small delay to ensure the original script has populated the dropdown
-                setTimeout(() => {
-                    if (stateSelect) {
-                        stateSelect.value = stateCodeFromUrl;
-                        // Manually trigger the change event to update the UI
-                        stateSelect.dispatchEvent(new Event('change'));
-                        
-                        if (stateSelectionGroup) {
-                            stateSelectionGroup.style.display = 'none';
-                        }
+                // No more timeout needed, as init() has already run
+                if (stateSelect) {
+                    stateSelect.value = stateCodeFromUrl;
+                    // Manually trigger the change event to update the UI
+                    stateSelect.dispatchEvent(new Event('change'));
+                    
+                    if (stateSelectionGroup) {
+                        stateSelectionGroup.style.display = 'none';
                     }
-                }, 100);
+                }
             }
         });
 
@@ -330,13 +389,39 @@
                 {"name": "Andhra Pradesh", "code": "AP", "discom": "APSPDCL", "url": "andhra-pradesh"},
                 {"name": "Telangana", "code": "TS", "discom": "TSSPDCL", "url": "telangana"}
             ],
-            // ... (The entire rest of your 700+ line app.js file goes here) ...
-            // This is just a placeholder to represent the full file content
+            "consumerTypes": {
+                "TN": ["Domestic", "Commercial"],
+                "MH": ["Residential", "Commercial", "Industrial"],
+                "KA": ["LT-2a (Domestic)", "LT-3 (Commercial)"],
+                "DL": ["Domestic", "Non-Domestic"],
+                "GJ": ["RGP (Residential)", "Non-RGP"],
+                "RJ": ["Domestic", "Non-Domestic"],
+                "WB": ["Domestic (Urban)", "Domestic (Rural)"],
+                "UP": ["LMV-1 (Domestic)", "LMV-2 (Commercial)"],
+                "AP": ["Category I (Domestic)", "Category II (Commercial)"],
+                "TS": ["Category I (Domestic)", "Category II (Non-Domestic)"]
+            },
+            "tariffs": {
+                "TN": {
+                    "Domestic": [
+                        {"slab": 100, "rate": 0},
+                        {"slab": 200, "rate": 2.25},
+                        {"slab": 400, "rate": 4.50},
+                        {"slab": 500, "rate": 6.00}
+                    ]
+                },
+                "MH": {
+                    "Residential": [
+                        {"slab": 100, "rate": 5.50},
+                        {"slab": 300, "rate": 10.05},
+                        {"slab": 500, "rate": 14.25},
+                        {"slab": "infinity", "rate": 16.25}
+                    ]
+                }
+                // ... (and so on for all states)
+            }
         };
 
-        // All your other functions like init(), populateStates(), calculateBill(), etc.
-        // would be here. For this example, I'll add a simplified init.
-        
         let calculationData = {};
         let slabChart = null;
 
@@ -357,46 +442,151 @@
             });
         }
 
+        function populateConsumerTypes(stateCode) {
+            const consumerTypeSelect = document.getElementById('consumer-type');
+            if (!consumerTypeSelect) return;
+            
+            // Clear previous options
+            consumerTypeSelect.innerHTML = '<option value="">Select consumer type...</option>';
+            
+            const types = applicationData.consumerTypes[stateCode] || [];
+            types.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                consumerTypeSelect.appendChild(option);
+            });
+        }
+
         function addEventListeners() {
             const stateSelect = document.getElementById('state-select');
+            const consumerTypeSelect = document.getElementById('consumer-type');
+            const directUnitsInput = document.getElementById('direct-units');
+            const calculateBtn = document.getElementById('calculate-bill');
+            
             const nextStep1Btn = document.getElementById('next-step-1');
+            const prevStep2Btn = document.getElementById('prev-step-2');
+            const nextStep2Btn = document.getElementById('next-step-2');
+            const prevStep3Btn = document.getElementById('prev-step-3');
+
             const newCalculationBtn = document.getElementById('new-calculation');
+            const exportBtn = document.getElementById('export-bill');
 
             if (stateSelect) {
-                stateSelect.addEventListener('change', () => {
-                    if(stateSelect.value) {
-                        nextStep1Btn.disabled = false;
-                        calculationData.state = applicationData.states.find(s => s.code === stateSelect.value);
+                stateSelect.addEventListener('change', (e) => handleStateChange(e.target.value));
+            }
+
+            if(consumerTypeSelect){
+                 consumerTypeSelect.addEventListener('change', (e) => {
+                     if(e.target.value){
+                         nextStep2Btn.disabled = false;
+                         calculationData.consumerType = e.target.value;
+                     } else {
+                         nextStep2Btn.disabled = true;
+                     }
+                 });
+            }
+            
+            if(directUnitsInput){
+                directUnitsInput.addEventListener('input', (e)=>{
+                    if(e.target.value && e.target.value > 0){
+                        calculateBtn.disabled = false;
                     } else {
-                        nextStep1Btn.disabled = true;
+                        calculateBtn.disabled = true;
                     }
                 });
             }
 
-            if (nextStep1Btn) {
-                nextStep1Btn.addEventListener('click', () => {
-                    document.getElementById('step-1').classList.add('hidden');
-                    document.getElementById('step-2').classList.remove('hidden');
-                });
-            }
+            if (nextStep1Btn) nextStep1Btn.addEventListener('click', () => showStep(2));
+            if (prevStep2Btn) prevStep2Btn.addEventListener('click', () => showStep(1));
+            if (nextStep2Btn) nextStep2Btn.addEventListener('click', () => showStep(3));
+            if (prevStep3Btn) prevStep3Btn.addEventListener('click', () => showStep(2));
             
-            // ... (many more event listeners from your app.js)
-             if(newCalculationBtn) {
-                newCalculationBtn.addEventListener('click', () => {
-                    // Reset to step 1
-                    document.getElementById('results-section').classList.add('hidden');
-                    document.getElementById('step-1').classList.remove('hidden');
-                    
-                    // Reset form fields
-                    document.getElementById('state-select').value = '';
-                    document.getElementById('next-step-1').disabled = true;
-                });
-            }
-
+            if (calculateBtn) calculateBtn.addEventListener('click', calculateBill);
+            if (newCalculationBtn) newCalculationBtn.addEventListener('click', resetCalculator);
+            if (exportBtn) exportBtn.addEventListener('click', () => alert('Export functionality would be here.'));
         }
         
-        // Run the app
-        document.addEventListener('DOMContentLoaded', init);
+        function handleStateChange(stateCode){
+            const nextStep1Btn = document.getElementById('next-step-1');
+            if (stateCode) {
+                nextStep1Btn.disabled = false;
+                calculationData.state = applicationData.states.find(s => s.code === stateCode);
+                populateConsumerTypes(stateCode);
+            } else {
+                nextStep1Btn.disabled = true;
+            }
+        }
+
+        function showStep(stepNum) {
+            document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
+            document.getElementById(`step-${stepNum}`).classList.remove('hidden');
+        }
+
+        function calculateBill() {
+            const units = parseInt(document.getElementById('direct-units').value, 10);
+            if(isNaN(units) || units <= 0) {
+                alert("Please enter a valid number of units.");
+                return;
+            }
+            
+            calculationData.units = units;
+
+            // This is a dummy calculation. Your real logic is much more complex.
+            const rate = 7.5; // Dummy rate
+            const fixedCharge = 110; // Dummy charge
+            const total = (units * rate) + fixedCharge;
+            
+            displayResults(total);
+        }
+
+        function displayResults(total) {
+            document.getElementById('total-amount').textContent = total.toFixed(2);
+            
+            // Populate summary (dummy data for now)
+            document.querySelector('#results-section .bill-summary').innerHTML = `
+                <div class="summary-item">
+                    <span class="summary-label">State:</span>
+                    <span class="summary-value">${calculationData.state.name}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Consumer Type:</span>
+                    <span class="summary-value">${calculationData.consumerType}</span>
+                </div>
+                 <div class="summary-item">
+                    <span class="summary-label">Units Consumed:</span>
+                    <span class="summary-value">${calculationData.units} kWh</span>
+                </div>
+            `;
+
+            showStep('results');
+            
+            // Draw chart (dummy data)
+            const ctx = document.getElementById('slabChartCanvas').getContext('2d');
+            if(slabChart) slabChart.destroy();
+            slabChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Slab 1', 'Slab 2', 'Fixed Charges'],
+                    datasets: [{
+                        label: 'Bill Breakdown',
+                        data: [calculationData.units * 0.5 * 7.5, calculationData.units * 0.5 * 7.5, 110],
+                        backgroundColor: ['#007bff', '#28a745', '#dc3545']
+                    }]
+                }
+            });
+        }
+        
+        function resetCalculator(){
+            calculationData = {};
+            document.getElementById('state-select').value = '';
+            document.getElementById('consumer-type').innerHTML = '<option value="">Select consumer type...</option>';
+            document.getElementById('direct-units').value = '';
+            document.getElementById('next-step-1').disabled = true;
+            document.getElementById('next-step-2').disabled = true;
+            document.getElementById('calculate-bill').disabled = true;
+            showStep(1);
+        }
 
     </script>
 </body>
