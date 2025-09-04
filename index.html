@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerCalc India - Complete Electricity Bill Calculator</title>
+    <meta name="description" content="Calculate your electricity bill for any Indian state with our accurate, free calculator. Get instant bill estimates, energy-saving tips, and tariff analysis for TNEB, MSEDCL, BESCOM & more.">
+    <meta name="keywords" content="electricity bill calculator India, power bill calculation, electricity tariff rates India, energy bill calculator, TNEB calculator, MSEDCL bill, BESCOM tariff, electricity cost calculator, power consumption calculator, energy savings tips India">
+    <meta name="author" content="PowerCalc India">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <meta property="og:title" content="ElectricityBills.info - Free Electricity Bill Calculator for All Indian States">
+    <meta property="og:description" content="Calculate your electricity bill instantly for any Indian state. Free, accurate, and comprehensive bill calculator with energy-saving recommendations.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://electricitybills.info/">
+    <meta property="og:image" content="https://electricitybills.info/images/og-image.jpg">
+    <meta property="og:site_name" content="ElectricityBills.info">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ElectricityBills.info - Free Electricity Bill Calculator">
+    <meta name="twitter:description" content="Calculate electricity bills for all Indian states instantly. Free calculator with personalized energy-saving tips.">
+    <meta name="twitter:image" content="https://electricitybills.info/images/twitter-image.jpg">
+    <link rel="canonical" href="https://electricitybills.info/">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <!-- Schema Markup for SEO and AIO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ElectricityBills.info",
+      "alternateName": "ElectricityBills.info - Electricity Bill Calculator",
+      "url": "https://electricitybills.info/",
+      "description": "Free electricity bill calculator for all Indian states with accurate tariff rates and energy-saving recommendations",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://electricitybills.info/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ElectricityBills.info",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://electricitybills.info/images/logo.png"
+        }
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to calculate electricity bill from meter reading in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To calculate your electricity bill from meter reading: 1) Note current meter reading, 2) Subtract previous month's reading to get units consumed, 3) Apply slab rates based on your state's tariff structure, 4) Add fixed charges, taxes, and surcharges. Our free calculator automates this process for all 36 Indian states and union territories with up-to-date tariff rates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are slab rates in Indian electricity billing system?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Slab rates are tiered pricing structures where electricity rates increase progressively with higher consumption. Typical structure: 0-100 units at ₹3-4/unit, 101-300 units at ₹5-7/unit, 301-500 units at ₹8-10/unit, above 500 units at ₹10-14/unit. Each state has different slab rates set by their electricity regulatory commission."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How to reduce electricity bill in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Reduce electricity bills by: using LED bulbs, setting AC temperature to 24-26°C, unplugging devices when not in use, using natural light during day, regular appliance maintenance, installing solar panels, using energy-efficient appliances with 5-star ratings, and monitoring consumption patterns to avoid higher slab rates."
+          }
+        }
+      ]
+    }
+    </script>
+     <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "blogPost": [
+        {
+          "@type": "BlogPosting",
+          "headline": "10 Ways to Reduce Your Electricity Bill in Summer 2025",
+          "author": {
+            "@type": "Organization",
+            "name": "PowerCalc India"
+          },
+          "datePublished": "2025-09-01",
+          "description": "Beat the heat without breaking the bank. Learn proven strategies to cut your summer electricity costs by up to 40%.",
+           "image": "https://placehold.co/600x400/000000/FFFFFF?text=Summer+Savings"
+        }
+      ]
+    }
+    </script>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <nav class="header-nav">
+                <div class="logo">
+                    <h1>PowerCalc India</h1>
+                    <span class="tagline">Smart Electricity Bill Calculator</span>
+                </div>
+                
+                <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                
+                <ul class="nav-list">
+                    <li><a href="#calculator" class="nav-link active" aria-label="Bill Calculator">📊 Calculator</a></li>
+                    <li><a href="#states" class="nav-link" aria-label="State Tariffs">🗺️ States</a></li>
+                    <li><a href="#faq" class="nav-link" aria-label="Frequently Asked Questions">❓ FAQ</a></li>
+                    <li><a href="#blog" class="nav-link" aria-label="Energy Blog">📝 Blog</a></li>
+                    <li><a href="#glossary" class="nav-link" aria-label="Energy Terms">📚 Glossary</a></li>
+                    <li><a href="#about" class="nav-link" aria-label="About Us">ℹ️ About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">⚡</div>
+                <h1>India's Most Comprehensive Electricity Bill Calculator</h1>
+                <p class="hero-description">Calculate accurate electricity bills for all 36 states and UTs. Get personalized saving recommendations and energy efficiency tips with real-time tariff data.</p>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">🎯</span>
+                        <span>Accurate Calculations</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">💡</span>
+                        <span>Energy Saving Tips</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🏛️</span>
+                        <span>All 36 States Covered</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Calculator Section -->
+        <section id="calculator" class="section">
+            <div class="container">
+                <div class="calculator-container">
+                    <!-- Step 1: State Selection -->
+                    <div id="step-1" class="form-step card">
+                        <div class="card__body">
+                            <h2>Select Your State/Union Territory</h2>
+                            
+                            <div class="form-group">
+                                <label for="state-select" class="form-label">Choose your state or union territory</label>
+                                <select id="state-select" class="form-control">
+                                    <option value="">Select State/UT...</option>
+                                </select>
+                                <small class="form-text">Select your state to view applicable tariffs</small>
+                            </div>
+
+                            <!-- State Information Panel -->
+                            <div id="state-info" class="state-info hidden">
+                                <div class="state-highlight">
+                                    <h4 id="state-name">State Name</h4>
+                                    <div class="state-details">
+                                        <p><strong>Regulator:</strong> <span id="state-regulator">-</span></p>
+                                        <p><strong>Status:</strong> <span id="state-status">-</span></p>
+                                        <p><strong>Financial Year:</strong> <span id="state-fy">-</span></p>
+                                        <p><strong>Billing Cycle:</strong> <span id="state-billing-cycle">-</span></p>
+                                    </div>
+                                    <div class="special-features" id="special-features">
+                                        <!-- Special features will be populated dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button id="next-step-1" class="btn btn--primary btn--full-width" disabled>
+                                    Next: Consumer Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Consumer Type -->
+                    <div id="step-2" class="form-step card hidden">
+                        <div class="card__body">
+                            <h2>Consumer Details</h2>
+                            
+                            <div class="form-group">
+                                <label for="consumer-type" class="form-label">Consumer Type</label>
+                                <select id="consumer-type" class="form-control">
+                                    <option value="">Select consumer type...</option>
+                                </select>
+                                <small class="form-text">Different tariff rates apply for different consumer types</small>
+                            </div>
+
+                            <div class="form-group">
+                                <button id="prev-step-2" class="btn btn--secondary">Previous</button>
+                                <button id="next-step-2" class="btn btn--primary" disabled>
+                                    Next: Consumption
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Consumption Input -->
+                    <div id="step-3" class="form-step card hidden">
+                        <div class="card__body">
+                            <h2>Electricity Consumption</h2>
+                            
+                            <div class="form-group">
+                                <label class="form-label">How would you like to input consumption?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="direct-method" name="input-method" value="direct" checked>
+                                        <div>
+                                            <label for="direct-method" class="radio-label">Direct Units</label>
+                                            <small>Enter total units consumed directly</small>
+                                        </div>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="readings-method" name="input-method" value="readings">
+                                        <div>
+                                            <label for="readings-method" class="radio-label">Meter Readings</label>
+                                            <small>Calculate from previous and current readings</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Direct Input -->
+                            <div id="direct-input" class="input-section">
+                                <div class="form-group">
+                                    <label for="direct-units" class="form-label">Units Consumed (kWh)</label>
+                                    <input type="number" id="direct-units" class="form-control" 
+                                           placeholder="Enter units consumed" min="0" step="1">
+                                    <small class="form-text">Enter the total units consumed in the billing period</small>
+                                </div>
+                            </div>
+
+                            <!-- Meter Readings Input -->
+                            <div id="readings-input" class="input-section hidden">
+                                <div class="form-group">
+                                    <label for="previous-reading" class="form-label">Previous Meter Reading</label>
+                                    <input type="number" id="previous-reading" class="form-control" 
+                                           placeholder="Previous reading" min="0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="current-reading" class="form-label">Current Meter Reading</label>
+                                    <input type="number" id="current-reading" class="form-control" 
+                                           placeholder="Current reading" min="0" step="1">
+                                </div>
+                                <div id="calculated-units" class="calculated-units hidden">
+                                    <strong>Calculated Units: <span id="units-display">0</span> kWh</strong>
+                                </div>
+                            </div>
+
+                            <div class="billing-cycle-info">
+                                <!-- Billing cycle information will be populated dynamically -->
+                            </div>
+
+                            <div class="form-group">
+                                <button id="prev-step-3" class="btn btn--secondary">Previous</button>
+                                <button id="calculate-bill" class="btn btn--primary" disabled>
+                                    Calculate Bill
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="results-section" class="form-step card hidden">
+                        <div class="card__body">
+                            <h2>Your Electricity Bill</h2>
+                            
+                            <!-- Bill Summary -->
+                            <div class="bill-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">State/DISCOM:</span>
+                                    <span class="summary-value" id="result-state">-</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Consumer Type:</span>
+                                    <span class="summary-value" id="result-consumer-type">-</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Units Consumed:</span>
+                                    <span class="summary-value" id="result-units">-</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Billing Cycle:</span>
+                                    <span class="summary-value" id="result-billing-cycle">-</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Tariff Status:</span>
+                                    <span class="summary-value" id="result-tariff-status">-</span>
+                                </div>
+                            </div>
+
+                            <!-- Total Amount -->
+                            <div class="total-amount">
+                                <h3>Total Amount: ₹<span id="total-amount">0</span></h3>
+                                <p class="amount-note">Amount includes all applicable charges and adjustments</p>
+                            </div>
+
+                            <!-- Bill Analysis -->
+                            <div class="bill-analysis">
+                                <h3>Your Bill Analysis</h3>
+                                <div class="analysis-grid">
+                                    <div class="analysis-card">
+                                        <h4>Usage Efficiency</h4>
+                                        <div class="efficiency-grade" id="efficiency-grade">C</div>
+                                    </div>
+                                    <div class="analysis-card">
+                                        <h4>Monthly Projection</h4>
+                                        <div class="projection-value" id="monthly-projection">₹0</div>
+                                    </div>
+                                    <div class="analysis-card">
+                                        <h4>Yearly Estimate</h4>
+                                        <div class="yearly-value" id="yearly-estimate">₹0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recommendations -->
+                            <div class="recommendations-section">
+                                <h3>Personalized Saving Recommendations</h3>
+                                <div class="recommendations-grid" id="recommendations-grid">
+                                    <!-- Recommendations will be populated dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Comparison -->
+                            <div class="comparison-section">
+                                <h3>How You Compare</h3>
+                                <div class="comparison-grid">
+                                    <div class="comparison-card">
+                                        <h4>Average Rate</h4>
+                                        <div class="comparison-value">₹<span id="average-rate">0</span>/unit</div>
+                                    </div>
+                                    <div class="comparison-card">
+                                        <h4>State Average</h4>
+                                        <div class="comparison-value">₹6.50/unit</div>
+                                    </div>
+                                    <div class="comparison-card">
+                                        <h4>National Average</h4>
+                                        <div class="comparison-value">₹7.20/unit</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Detailed Breakdown -->
+                            <div class="breakdown-container">
+                                <h3>Detailed Breakdown</h3>
+                                <div id="breakdown-table" class="breakdown-table">
+                                    <!-- Breakdown table will be populated dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Chart Section -->
+                            <div class="chart-section">
+                                <h3>Slab-wise Consumption Breakdown</h3>
+                                <div class="chart-container">
+                                    <div id="slab-chart" style="height: 400px;">
+                                        <canvas id="slabChartCanvas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- State Notes -->
+                            <div id="state-notes" class="state-notes hidden">
+                                <h3>Important Notes</h3>
+                                <ul class="notes-list">
+                                    <!-- Notes will be populated dynamically -->
+                                </ul>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="result-actions">
+                                <button id="new-calculation" class="btn btn--secondary">New Calculation</button>
+                                <button id="export-bill" class="btn btn--outline">Export Bill</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- States Section -->
+        <section id="states" class="section hidden">
+            <div class="container">
+                <h2>State-wise Electricity Tariffs</h2>
+                <p>Comprehensive coverage for all 36 Indian states and union territories with latest tariff data.</p>
+                
+                <div id="states-grid" class="states-grid">
+                    <!-- States will be populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="section hidden">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-icon">❓</div>
+                    <h2>Frequently Asked Questions</h2>
+                    <p class="section-description">Get expert answers to common questions about electricity bills, tariff structures, and energy calculations across India.</p>
+                </div>
+                
+                <div class="faq-container">
+                    <!-- FAQ items will be populated dynamically with accordion functionality -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section id="blog" class="section hidden">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-icon">📝</div>
+                    <h2>Energy Insights & Expert Tips</h2>
+                    <p class="section-description">Stay updated with the latest energy-saving strategies, tariff changes, and electricity industry insights from our experts.</p>
+                </div>
+                
+                <div class="blog-list">
+                    <!-- Blog 1: Reduce Electricity Bill -->
+                    <div class="blog-card">
+                        <div class="blog-preview">
+                            <div class="blog-meta">
+                                <span class="blog-category">💡 Energy Savings</span>
+                                <span class="blog-date">Sep 3, 2025</span>
+                            </div>
+                            <h3><a href="blogs/reduce-electricity-bill-india/">🔌 How to Reduce Your Electricity Bill by 30% in India: A Practical 2025 Guide</a></h3>
+                            <p class="blog-intro">Shocked by your high electricity bill? Discover 15+ practical, India-specific tips to reduce household electricity costs. Learn about BEE star ratings, appliance usage, and smart habits.</p>
+                            
+                            <div class="blog-highlights">
+                                <h4>🎯 What You'll Learn:</h4>
+                                <ul class="blog-points">
+                                    <li>✅ Top 5 high-consumption appliances and how to optimize them</li>
+                                    <li>✅ BEE star rating system and real savings calculations</li>
+                                    <li>✅ Room-by-room guide to energy efficiency</li>
+                                    <li>✅ Understanding slab-based electricity billing</li>
+                                </ul>
+                            </div>
+                            
+                            <a href="blogs/reduce-electricity-bill-india/" class="read-more">📖 Read Full Article</a>
+                        </div>
+                    </div>
+
+                    <!-- Blog 2: Electricity Schemes & Tariffs -->
+                    <div class="blog-card">
+                        <div class="blog-preview">
+                            <div class="blog-meta">
+                                <span class="blog-category">💡 Government Schemes</span>
+                                <span class="blog-date">Sep 3, 2025</span>
+                            </div>
+                            <h3><a href="blogs/india-electricity-schemes-tariffs/">💡 India's Electricity Schemes, Tariffs & Subsidies: Your Ultimate 2025 Guide</a></h3>
+                            <p class="blog-intro">Decode your electricity bill in 2025! This guide explains India's complex tariff slabs, government subsidies, and energy schemes. Learn how to maximize your benefits.</p>
+                            
+                            <div class="blog-highlights">
+                                <h4>🎯 What You'll Learn:</h4>
+                                <ul class="blog-points">
+                                    <li>✅ Telescopic vs non-telescopic tariff systems</li>
+                                    <li>✅ State-wise electricity tariff comparison</li>
+                                    <li>✅ PM Surya Ghar and other government schemes</li>
+                                    <li>✅ How to calculate and understand bill components</li>
+                                </ul>
+                            </div>
+                            
+                            <a href="blogs/india-electricity-schemes-tariffs/" class="read-more">📖 Read Full Article</a>
+                        </div>
+                    </div>
+
+                    <!-- Blog 3: Original Bill Calculation Guide -->
+                    <div class="blog-card">
+                        <div class="blog-preview">
+                            <div class="blog-meta">
+                                <span class="blog-category">📊 Bill Calculation</span>
+                                <span class="blog-date">Updated: Sep 2025</span>
+                            </div>
+                            <h3>How to Calculate Your Electricity Bill in India: Complete 2025 Guide</h3>
+                            <p class="blog-intro">Master the art of electricity bill calculation with our comprehensive guide. Learn about slab rates, fixed charges, taxes, and state-specific tariff structures with real examples.</p>
+                            
+                            <div class="blog-highlights">
+                                <h4>🎯 What You'll Learn:</h4>
+                                <ul class="blog-points">
+                                    <li>✅ Understanding progressive slab rates and tiered pricing systems</li>
+                                    <li>✅ Complete breakdown of fixed charges and regulatory fees</li>
+                                    <li>✅ State-specific tariff examples with calculation methods</li>
+                                    <li>✅ Expert tips for using online bill calculators effectively</li>
+                                </ul>
+                            </div>
+                            
+                            <button class="read-more" onclick="toggleBlog(this)" aria-expanded="false">📖 Read Full Article</button>
+                        </div>
+                        
+                        <div class="blog-full hidden">
+                            <article class="blog-article">
+                                <h3>Understanding Your Electricity Bill: A Complete Guide</h3>
+                                <p class="article-intro">Electricity bills in India can seem complex, but understanding the calculation process empowers you to manage your energy costs effectively and identify potential savings.</p>
+                                
+                                <div class="formula-highlight">
+                                    <h4>🧮 The Core Formula</h4>
+                                    <div class="formula-box">
+                                        <strong>Total Bill Amount = Energy Charges + Fixed Charges + Taxes + Surcharges</strong>
+                                    </div>
+                                </div>
+                                
+                                <h4>⚡ Step 1: Understanding Units (kWh)</h4>
+                                <p>A kilowatt-hour (kWh) is the standard unit of electrical energy. One kWh equals the energy consumed by a 1000-watt appliance running for one hour.</p>
+                                <div class="calculation-example">
+                                    <strong>Example:</strong> A 100W LED bulb running for 10 hours = 1 kWh
+                                </div>
+                                
+                                <h4>📊 Step 2: Slab Rate System</h4>
+                                <p>Indian states use progressive slab pricing to encourage energy conservation:</p>
+                                <div class="slab-table">
+                                    <div class="slab-row">
+                                        <span class="slab-range">0-100 units</span>
+                                        <span class="slab-rate">₹3-4/unit</span>
+                                        <span class="slab-desc">Basic consumption tier</span>
+                                    </div>
+                                    <div class="slab-row">
+                                        <span class="slab-range">101-300 units</span>
+                                        <span class="slab-rate">₹5-7/unit</span>
+                                        <span class="slab-desc">Moderate usage tier</span>
+                                    </div>
+                                    <div class="slab-row">
+                                        <span class="slab-range">Above 300 units</span>
+                                        <span class="slab-rate">₹8-12/unit</span>
+                                        <span class="slab-desc">High consumption tier</span>
+                                    </div>
+                                </div>
+                                
+                                <h4>💰 Step 3: Additional Charges</h4>
+                                <ul class="charges-list">
+                                    <li><strong>Fixed Charges:</strong> Monthly connection fee based on sanctioned load</li>
+                                    <li><strong>Fuel Adjustment:</strong> Variable charges to account for fuel cost fluctuations</li>
+                                    <li><strong>Electricity Duty:</strong> State government tax on power consumption</li>
+                                    <li><strong>Regulatory Charges:</strong> Fees for grid maintenance and development</li>
+                                </ul>
+                                
+                                <div class="pro-tip">
+                                    <h4>💡 Expert Tip</h4>
+                                    <p>Use our automated calculator to avoid manual calculation errors and get state-specific accurate results instantly!</p>
+                                </div>
+                                
+                                <h4>🎯 Key Takeaways</h4>
+                                <ul class="takeaways">
+                                    <li>Monitor your consumption to stay within lower slab rates</li>
+                                    <li>Understand all components of your electricity bill</li>
+                                    <li>Use energy-efficient appliances to reduce overall consumption</li>
+                                    <li>Leverage online calculators for accurate bill estimation</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- Blog 2: Summer Bill Reduction -->
+                    <div class="blog-card">
+                        <div class="blog-preview">
+                            <span class="blog-category">Energy Saving</span>
+                            <h3>10 Ways to Reduce Your Electricity Bill in Summer 2025</h3>
+                            <p class="blog-intro">Beat the heat without breaking the bank. Learn proven strategies to cut your summer electricity costs by up to 40% with smart usage and efficiency tips.</p>
+                            
+                            <ul class="blog-points">
+                                <li>Optimal AC temperature settings</li>
+                                <li>Smart cooling strategies</li>
+                                <li>Energy-efficient appliance choices</li>
+                                <li>Peak hour usage management</li>
+                            </ul>
+                            
+                            <button class="read-more" onclick="toggleBlog(this)">Read Full Article</button>
+                        </div>
+                        
+                        <div class="blog-full hidden">
+                            <h4>Summer Energy Challenge</h4>
+                            <p>Summer months can see electricity bills double or triple due to increased cooling needs. Here are 10 proven strategies to keep your bills manageable while staying comfortable.</p>
+                            
+                            <h4>1. Optimal AC Temperature (24-26°C)</h4>
+                            <p>Setting your AC to 24-26°C instead of 18-20°C can reduce energy consumption by up to 30%. Each degree higher saves approximately 6% on cooling costs.</p>
+                            
+                            <h4>2. Use Ceiling Fans with AC</h4>
+                            <p>Combine ceiling fans with AC to circulate cool air effectively. This allows you to set the AC 2-3 degrees higher while maintaining the same comfort level.</p>
+                            
+                            <h4>3. Seal Air Leaks</h4>
+                            <p>Seal gaps around doors, windows, and ducts. Poor insulation can increase cooling costs by 20-40%.</p>
+                            
+                            <h4>4. LED Lighting Conversion</h4>
+                            <p>Replace all incandescent and CFL bulbs with LEDs. LEDs produce 75% less heat and use 80% less energy.</p>
+                            
+                            <h4>5. Smart Timing</h4>
+                            <p>Avoid using high-power appliances during peak hours (typically 6-10 PM). Many states have Time-of-Day tariffs with higher peak rates.</p>
+                            
+                            <h4>6. Regular AC Maintenance</h4>
+                            <p>Clean AC filters monthly and service annually. Dirty filters can increase energy consumption by 15%.</p>
+                            
+                            <h4>7. Solar Window Films</h4>
+                            <p>Install reflective window films to reduce heat gain by up to 50%. This is especially effective for west-facing windows.</p>
+                            
+                            <h4>8. Upgrade to 5-Star Appliances</h4>
+                            <p>When replacing appliances, choose 5-star rated models. The energy savings typically recover the extra cost within 2-3 years.</p>
+                            
+                            <h4>9. Unplug Electronics</h4>
+                            <p>Phantom loads from standby electronics can add 10% to your bill. Use power strips or smart plugs for easy disconnection.</p>
+                            
+                            <h4>10. Consider Solar Panels</h4>
+                            <p>For high electricity usage (>500 units/month), rooftop solar becomes cost-effective. Many states offer net metering and subsidies.</p>
+                            
+                            <h4>Expected Savings</h4>
+                            <p>Implementing these strategies can reduce summer electricity bills by 25-40%. Track your progress using our calculator to see the impact of each change.</p>
+                        </div>
+                    </div>
+
+                    <!-- Blog 3: Time-of-Day Tariffs -->
+                    <div class="blog-card">
+                        <div class="blog-preview">
+                            <span class="blog-category">Tariff Guide</span>
+                            <h3>Understanding Time-of-Day Tariffs: Save Money with Smart Usage</h3>
+                            <p class="blog-intro">Master ToD tariffs to save thousands annually. Complete guide to peak, off-peak, and solar hour rates across Indian states with practical usage strategies.</p>
+                            
+                            <ul class="blog-points">
+                                <li>Peak vs off-peak timing explained</li>
+                                <li>State-wise ToD rate comparison</li>
+                                <li>Load shifting strategies</li>
+                                <li>Smart device scheduling tips</li>
+                            </ul>
+                            
+                            <button class="read-more" onclick="toggleBlog(this)">Read Full Article</button>
+                        </div>
+                        
+                        <div class="blog-full hidden">
+                            <h4>What are Time-of-Day (ToD) Tariffs?</h4>
+                            <p>ToD tariffs charge different rates based on when you use electricity. This system encourages consumers to shift usage from peak to off-peak hours, helping balance grid demand.</p>
+                            
+                            <h4>Typical ToD Structure</h4>
+                            <p><strong>Peak Hours (6 PM - 10 PM):</strong> Highest rates, often 50-100% higher than base rate</p>
+                            <p><strong>Off-Peak Hours (10 PM - 6 AM):</strong> Lowest rates, often 20-30% lower than base rate</p>
+                            <p><strong>Solar Hours (10 AM - 3 PM):</strong> Some states offer reduced rates when solar generation is high</p>
+                            
+                            <h4>State-wise Implementation</h4>
+                            <ul>
+                                <li><strong>Delhi:</strong> Voluntary ToD for domestic consumers above 5kW</li>
+                                <li><strong>Maharashtra:</strong> Mandatory for industrial, optional for commercial</li>
+                                <li><strong>Karnataka:</strong> Available for all consumer categories</li>
+                                <li><strong>Rajasthan:</strong> Mandatory for connections above 50kW</li>
+                            </ul>
+                            
+                            <h4>Smart Usage Strategies</h4>
+                            <p><strong>Shift Heavy Loads:</strong></p>
+                            <ul>
+                                <li>Run washing machines and dishwashers after 10 PM</li>
+                                <li>Charge electric vehicles overnight</li>
+                                <li>Schedule water heater operation during off-peak hours</li>
+                            </ul>
+                            
+                            <p><strong>Peak Hour Avoidance:</strong></p>
+                            <ul>
+                                <li>Use timers for non-essential appliances</li>
+                                <li>Pre-cool homes before peak hours</li>
+                                <li>Avoid cooking with electric appliances during peak</li>
+                            </ul>
+                            
+                            <h4>Technology Solutions</h4>
+                            <p><strong>Smart Home Automation:</strong> Use smart plugs, thermostats, and energy management systems to automatically shift loads.</p>
+                            <p><strong>Battery Storage:</strong> Store off-peak electricity for use during peak hours (becoming cost-effective for large consumers).</p>
+                            
+                            <h4>Financial Benefits</h4>
+                            <p>Households that effectively manage ToD schedules can save 15-25% on electricity bills. For high-usage consumers (>800 units/month), annual savings can exceed ₹10,000.</p>
+                            
+                            <h4>Getting Started</h4>
+                            <p>Contact your electricity board to inquire about ToD tariff options. Most require smart meters for accurate time-based billing. Use our calculator to compare standard vs ToD tariff savings for your usage pattern.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Glossary Section -->
+        <section id="glossary" class="section hidden">
+            <div class="container">
+                <h2>Electricity Terms Glossary</h2>
+                <p>Understand key electricity and billing terms used across Indian power sector.</p>
+                
+                <div class="glossary-container">
+                    <!-- Glossary terms will be populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section hidden">
+            <div class="container">
+                <div class="about-content">
+                    <h2>About PowerCalc India</h2>
+                    
+                    <div class="about-text">
+                        <p>PowerCalc India is the most comprehensive electricity bill calculator for all Indian states and union territories. We provide accurate billing estimates based on official tariff data from State Electricity Regulatory Commissions (SERCs) and Joint Electricity Regulatory Commission (JERC).</p>
+
+                        <h3>Our Mission</h3>
+                        <p>To empower Indian consumers with accurate electricity bill calculations, energy-saving insights, and smart energy management solutions.</p>
+
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li>Coverage for all 36 states and UTs</li>
+                            <li>Official tariff data for FY 2025-26</li>
+                            <li>Slab-wise and Time-of-Day calculations</li>
+                            <li>Personalized energy-saving recommendations</li>
+                            <li>Smart meter and green energy options</li>
+                            <li>Regular tariff updates and notifications</li>
+                        </ul>
+
+                        <h3>Data Sources</h3>
+                        <p>All tariff data is sourced from official regulatory orders and notifications. We maintain accuracy through regular updates from electricity boards across India.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PowerCalc India</h4>
+                    <p>India's most comprehensive electricity bill calculator with coverage for all 36 states and union territories.</p>
+                    
+                    <div class="social-links">
+                        <a href="#">Twitter</a>
+                        <a href="#">LinkedIn</a>
+                        <a href="#">GitHub</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#calculator">Calculator</a></li>
+                        <li><a href="#states">State Tariffs</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#blog">Energy Tips</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#glossary">Glossary</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Energy Partners</h4>
+                    <p><a href="#" class="partner-link">SolarSquare</a> - Premium solar installations</p>
+                    <p><a href="#" class="partner-link">MYSUN</a> - Affordable solar solutions</p>
+                    <p><a href="#" class="partner-link">Schneider Electric</a> - Smart home automation</p>
+                </div>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <p><strong>Disclaimer:</strong> This calculator provides estimates based on official tariff data. Actual bills may vary due to meter reading dates, additional charges, taxes, and regulatory changes.</p>
+                <p>© 2025 PowerCalc India. All rights reserved. | Data sourced from State Electricity Regulatory Commissions</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load the JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
+
