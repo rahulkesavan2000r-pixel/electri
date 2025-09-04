@@ -4,181 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PowerCalc India - Widget</title>
-    <!-- This internal style makes the widget self-contained -->
+
+    <!-- CRITICAL FIX: Added the link to your original stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- CRITICAL FIX: Added the missing Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <!-- This minimal style ensures the widget fits well in the iframe -->
     <style>
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --background-color: #f8f9fa;
-            --card-background: #ffffff;
-            --text-color: #333;
-            --border-color: #dee2e6;
-            --font-family: 'Inter', sans-serif;
-        }
         body {
-            font-family: var(--font-family);
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
+            background-color: #ffffff; /* Ensures clean background inside iframe */
             padding: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
         }
-        .calculator-container {
-            background: var(--card-background);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 600px;
-        }
-        .form-step {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .hidden {
-            display: none;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .form-label {
-            font-weight: 600;
-        }
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn--primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .btn--primary:disabled {
-            background-color: #a0c7ff;
-            cursor: not-allowed;
-        }
-        .btn--secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        .radio-group { display: flex; gap: 1rem; }
-        .radio-option { display: flex; align-items: center; gap: 0.5rem; }
-        .total-amount {
-            background-color: #e9f5ff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #bde0fe;
-        }
-        .total-amount h3 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #0056b3;
-        }
-        #state-info { padding: 1rem; background: #f1f3f5; border-radius: 8px; }
-        .state-highlight h4 { margin-top: 0; }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- This is the full calculator structure extracted from your index.html -->
     <div class="calculator-container" id="calculator-container">
         <!-- Step 1: State Selection -->
-        <div id="step-1" class="form-step">
-            <div class="form-group" id="state-selection-group">
-                <label for="state-select" class="form-label">Select Your State/Union Territory</label>
-                <select id="state-select" class="form-control">
-                    <option value="">Select State/UT...</option>
-                </select>
+        <div id="step-1" class="form-step card">
+            <div class="card__body">
+                <h2>Select Your State/Union Territory</h2>
+                <div class="form-group" id="state-selection-group">
+                    <label for="state-select" class="form-label">Choose your state or union territory</label>
+                    <select id="state-select" class="form-control">
+                        <option value="">Select State/UT...</option>
+                    </select>
+                </div>
+                <div id="state-info" class="state-info hidden"></div>
+                <div class="form-group">
+                    <button id="next-step-1" class="btn btn--primary btn--full-width" disabled>
+                        Next: Consumer Details
+                    </button>
+                </div>
             </div>
-            <div id="state-info" class="state-info hidden"></div>
-            <button id="next-step-1" class="btn btn--primary" disabled>Next</button>
         </div>
 
         <!-- Step 2: Consumer Type -->
-        <div id="step-2" class="form-step hidden">
-            <div class="form-group">
-                <label for="consumer-type" class="form-label">Consumer Type</label>
-                <select id="consumer-type" class="form-control">
-                    <option value="">Select consumer type...</option>
-                </select>
-            </div>
-            <div>
-                <button id="prev-step-2" class="btn btn--secondary">Previous</button>
-                <button id="next-step-2" class="btn btn--primary" disabled>Next</button>
+        <div id="step-2" class="form-step card hidden">
+            <div class="card__body">
+                <h2>Consumer Details</h2>
+                <div class="form-group">
+                    <label for="consumer-type" class="form-label">Consumer Type</label>
+                    <select id="consumer-type" class="form-control">
+                        <option value="">Select consumer type...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button id="prev-step-2" class="btn btn--secondary">Previous</button>
+                    <button id="next-step-2" class="btn btn--primary" disabled>
+                        Next: Consumption
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Step 3: Consumption Input -->
-        <div id="step-3" class="form-step hidden">
-            <div class="form-group">
-                <label class="form-label">Input Method</label>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="direct-method" name="input-method" value="direct" checked>
-                        <label for="direct-method">Direct Units</label>
+        <div id="step-3" class="form-step card hidden">
+            <div class="card__body">
+                <h2>Electricity Consumption</h2>
+                <div class="form-group">
+                    <label class="form-label">How would you like to input consumption?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="direct-method" name="input-method" value="direct" checked>
+                            <label for="direct-method" class="radio-label">Direct Units</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="readings-method" name="input-method" value="readings">
+                            <label for="readings-method" class="radio-label">Meter Readings</label>
+                        </div>
                     </div>
-                    <div class="radio-option">
-                        <input type="radio" id="readings-method" name="input-method" value="readings">
-                        <label for="readings-method">Meter Readings</label>
+                </div>
+                <div id="direct-input" class="input-section">
+                    <div class="form-group">
+                        <label for="direct-units" class="form-label">Units Consumed (kWh)</label>
+                        <input type="number" id="direct-units" class="form-control" placeholder="Enter units consumed" min="0" step="1">
                     </div>
                 </div>
-            </div>
-            <div id="direct-input" class="input-section">
-                <div class="form-group">
-                    <label for="direct-units" class="form-label">Units Consumed (kWh)</label>
-                    <input type="number" id="direct-units" class="form-control" placeholder="Enter units" min="0">
-                </div>
-            </div>
-            <div id="readings-input" class="input-section hidden">
-                <div class="form-group">
-                    <label for="previous-reading" class="form-label">Previous Reading</label>
-                    <input type="number" id="previous-reading" class="form-control" placeholder="Previous" min="0">
+                <div id="readings-input" class="input-section hidden">
+                    <div class="form-group">
+                        <label for="previous-reading" class="form-label">Previous Meter Reading</label>
+                        <input type="number" id="previous-reading" class="form-control" placeholder="Previous reading" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="current-reading" class="form-label">Current Meter Reading</label>
+                        <input type="number" id="current-reading" class="form-control" placeholder="Current reading" min="0" step="1">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="current-reading" class="form-label">Current Reading</label>
-                    <input type="number" id="current-reading" class="form-control" placeholder="Current" min="0">
+                    <button id="prev-step-3" class="btn btn--secondary">Previous</button>
+                    <button id="calculate-bill" class="btn btn--primary" disabled>
+                        Calculate Bill
+                    </button>
                 </div>
-            </div>
-             <div>
-                <button id="prev-step-3" class="btn btn--secondary">Previous</button>
-                <button id="calculate-bill" class="btn btn--primary" disabled>Calculate Bill</button>
             </div>
         </div>
-        
+
         <!-- Results Section -->
-        <div id="results-section" class="form-step hidden">
-            <h2>Your Estimated Bill</h2>
-            <div class="total-amount">
-                <h3>₹<span id="total-amount">0</span></h3>
+        <div id="results-section" class="form-step card hidden">
+             <div class="card__body">
+                <h2>Your Electricity Bill</h2>
+                <div class="bill-summary">
+                    <!-- Results will be populated here -->
+                </div>
+                <div class="total-amount">
+                    <h3>Total Amount: ₹<span id="total-amount">0</span></h3>
+                </div>
+                <div class="bill-analysis">
+                    <h3>Your Bill Analysis</h3>
+                    <canvas id="slabChartCanvas"></canvas>
+                </div>
+                 <div class="recommendations-section">
+                    <h3>Personalized Saving Recommendations</h3>
+                    <div id="recommendations-grid"></div>
+                </div>
+                <div class="result-actions">
+                    <button id="new-calculation" class="btn btn--secondary">New Calculation</button>
+                    <button id="export-bill" class="btn btn--outline">Export Bill</button>
+                </div>
             </div>
-            <div id="breakdown-table"></div>
-            <div class="chart-container" style="height: 250px;"><canvas id="slabChartCanvas"></canvas></div>
-            <div id="recommendations-grid"></div>
-            <button id="new-calculation" class="btn btn--secondary">New Calculation</button>
         </div>
     </div>
 
-    <!-- THIS IS THE CRUCIAL FIX: The leading "/" tells the browser to always find app.js in the root folder. -->
+    <!-- This links to your ORIGINAL, full app.js file -->
     <script src="/app.js"></script>
 </body>
 </html>
