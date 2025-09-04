@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PowerCalc India - Widget</title>
     
-    <!-- This library is loaded from a CDN, so its path is fine. -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     
-    <!-- FINAL FIX: The entire content of your style.css is now embedded here -->
+    <!-- The entire content of your style.css is now embedded here -->
     <style>
         /* General Body and Layout */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f9;
+            background-color: #ffffff; /* Changed to white for clean embed */
             color: #333;
             margin: 0;
-            padding: 1rem;
+            padding: 0; /* Removed padding for better iframe fit */
             line-height: 1.6;
         }
 
@@ -49,18 +48,20 @@
         .card {
             background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            /* Removed shadow for a cleaner embed look */
+            box-shadow: none; 
+            border: 1px solid #e0e0e0;
             overflow: hidden;
         }
 
         .card__body {
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         h2 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-top: 0;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             text-align: center;
             color: #1a2533;
         }
@@ -126,7 +127,6 @@
             box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
         }
 
-
         /* Buttons */
         .btn {
             display: inline-block;
@@ -181,24 +181,30 @@
 
         /* State Info Panel */
         .state-info {
-            background: #e9ecef;
+            background: #f8f9fa;
             padding: 1rem;
             border-radius: 8px;
             margin-top: 1.5rem;
+            border: 1px solid #dee2e6;
+        }
+        
+        .state-highlight h4 {
+            margin: 0 0 0.5rem 0;
+            color: #0056b3;
         }
 
         /* Results Section */
         .total-amount {
             background: linear-gradient(135deg, #007bff, #0056b3);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 8px;
             text-align: center;
             margin-bottom: 2rem;
         }
         .total-amount h3 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
 
         .bill-summary {
@@ -208,7 +214,7 @@
         .summary-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
+            padding: 0.75rem 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -230,14 +236,12 @@
 
         /* Calculator Container */
         .calculator-container {
-            max-width: 650px;
+            max-width: 100%; /* Take full width of iframe */
             margin: 0 auto;
         }
-
     </style>
 </head>
 <body>
-    <!-- This is the full calculator structure extracted from your index.html -->
     <div class="calculator-container" id="calculator-container">
         <!-- Step 1: State Selection -->
         <div id="step-1" class="form-step card">
@@ -257,7 +261,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Step 2: Consumer Type -->
         <div id="step-2" class="form-step card hidden">
             <div class="card__body">
@@ -276,7 +279,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Step 3: Consumption Input -->
         <div id="step-3" class="form-step card hidden">
             <div class="card__body">
@@ -309,6 +311,9 @@
                         <label for="current-reading" class="form-label">Current Meter Reading</label>
                         <input type="number" id="current-reading" class="form-control" placeholder="Current reading" min="0" step="1">
                     </div>
+                    <div id="calculated-units" class="calculated-units hidden">
+                        <strong>Calculated Units: <span id="units-display">0</span> kWh</strong>
+                    </div>
                 </div>
                 <div class="form-group">
                     <button id="prev-step-3" class="btn btn--secondary">Previous</button>
@@ -318,22 +323,21 @@
                 </div>
             </div>
         </div>
-
         <!-- Results Section -->
         <div id="results-section" class="form-step card hidden">
-             <div class="card__body">
+            <div class="card__body">
                 <h2>Your Electricity Bill</h2>
-                <div class="bill-summary">
-                    <!-- Results will be populated here -->
-                </div>
+                <div class="bill-summary"></div>
                 <div class="total-amount">
                     <h3>Total Amount: ₹<span id="total-amount">0</span></h3>
                 </div>
                 <div class="bill-analysis">
                     <h3>Your Bill Analysis</h3>
-                    <canvas id="slabChartCanvas"></canvas>
+                    <div class="chart-container" style="height:300px">
+                         <canvas id="slabChartCanvas"></canvas>
+                    </div>
                 </div>
-                 <div class="recommendations-section">
+                <div class="recommendations-section">
                     <h3>Personalized Saving Recommendations</h3>
                     <div id="recommendations-grid"></div>
                 </div>
@@ -345,37 +349,11 @@
         </div>
     </div>
 
-    <!-- FINAL FIX: The entire content of your app.js is now embedded here -->
+    <!-- The entire content of your app.js is now embedded here -->
     <script>
         // Enhanced PowerCalc India - Complete Energy Management Platform JavaScript
 
-        // Smart logic to auto-select state from URL parameter
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const stateCodeFromUrl = params.get('state');
-            
-            // The init() function will now be called after this block,
-            // so we can reliably get the stateSelect element.
-            init(); 
-            
-            if (stateCodeFromUrl) {
-                const stateSelect = document.getElementById('state-select');
-                const stateSelectionGroup = document.getElementById('state-selection-group');
-                
-                // No more timeout needed, as init() has already run
-                if (stateSelect) {
-                    stateSelect.value = stateCodeFromUrl;
-                    // Manually trigger the change event to update the UI
-                    stateSelect.dispatchEvent(new Event('change'));
-                    
-                    if (stateSelectionGroup) {
-                        stateSelectionGroup.style.display = 'none';
-                    }
-                }
-            }
-        });
-
-        // Application Data (your full app.js content)
+        // Application Data
         const applicationData = {
             "states": [
                 {"name": "Tamil Nadu", "code": "TN", "discom": "TNEB", "url": "tamil-nadu"},
@@ -389,7 +367,7 @@
                 {"name": "Andhra Pradesh", "code": "AP", "discom": "APSPDCL", "url": "andhra-pradesh"},
                 {"name": "Telangana", "code": "TS", "discom": "TSSPDCL", "url": "telangana"}
             ],
-            "consumerTypes": {
+             "consumerTypes": {
                 "TN": ["Domestic", "Commercial"],
                 "MH": ["Residential", "Commercial", "Industrial"],
                 "KA": ["LT-2a (Domestic)", "LT-3 (Commercial)"],
@@ -402,13 +380,15 @@
                 "TS": ["Category I (Domestic)", "Category II (Non-Domestic)"]
             },
             "tariffs": {
-                "TN": {
+                 "TN": {
                     "Domestic": [
                         {"slab": 100, "rate": 0},
                         {"slab": 200, "rate": 2.25},
                         {"slab": 400, "rate": 4.50},
-                        {"slab": 500, "rate": 6.00}
-                    ]
+                        {"slab": 500, "rate": 6.00},
+                        {"slab": "infinity", "rate": 8.00}
+                    ],
+                    "fixedCharges": 50
                 },
                 "MH": {
                     "Residential": [
@@ -416,9 +396,10 @@
                         {"slab": 300, "rate": 10.05},
                         {"slab": 500, "rate": 14.25},
                         {"slab": "infinity", "rate": 16.25}
-                    ]
+                    ],
+                    "fixedCharges": 110
                 }
-                // ... (and so on for all states)
+                // ... all other state tariff data ...
             }
         };
 
@@ -428,12 +409,28 @@
         function init() {
             populateStates();
             addEventListeners();
+            
+            // Smart logic to auto-select state from URL parameter
+            const params = new URLSearchParams(window.location.search);
+            const stateCodeFromUrl = params.get('state');
+            if (stateCodeFromUrl) {
+                const stateSelect = document.getElementById('state-select');
+                if (stateSelect) {
+                    stateSelect.value = stateCodeFromUrl;
+                    handleStateChange(stateCodeFromUrl); // Manually trigger state change logic
+                    
+                    const stateSelectionGroup = document.getElementById('state-selection-group');
+                    if (stateSelectionGroup) {
+                        stateSelectionGroup.style.display = 'none';
+                    }
+                    // Automatically move to the next step
+                    showStep(2);
+                }
+            }
         }
 
         function populateStates() {
             const stateSelect = document.getElementById('state-select');
-            if (!stateSelect) return;
-
             applicationData.states.forEach(state => {
                 const option = document.createElement('option');
                 option.value = state.code;
@@ -444,11 +441,7 @@
 
         function populateConsumerTypes(stateCode) {
             const consumerTypeSelect = document.getElementById('consumer-type');
-            if (!consumerTypeSelect) return;
-            
-            // Clear previous options
             consumerTypeSelect.innerHTML = '<option value="">Select consumer type...</option>';
-            
             const types = applicationData.consumerTypes[stateCode] || [];
             types.forEach(type => {
                 const option = document.createElement('option');
@@ -459,63 +452,47 @@
         }
 
         function addEventListeners() {
-            const stateSelect = document.getElementById('state-select');
-            const consumerTypeSelect = document.getElementById('consumer-type');
-            const directUnitsInput = document.getElementById('direct-units');
-            const calculateBtn = document.getElementById('calculate-bill');
+            document.getElementById('state-select').addEventListener('change', (e) => handleStateChange(e.target.value));
+            document.getElementById('consumer-type').addEventListener('change', handleConsumerTypeChange);
+            document.getElementById('direct-units').addEventListener('input', handleUnitInputChange);
+            document.getElementById('calculate-bill').addEventListener('click', calculateBill);
             
-            const nextStep1Btn = document.getElementById('next-step-1');
-            const prevStep2Btn = document.getElementById('prev-step-2');
-            const nextStep2Btn = document.getElementById('next-step-2');
-            const prevStep3Btn = document.getElementById('prev-step-3');
-
-            const newCalculationBtn = document.getElementById('new-calculation');
-            const exportBtn = document.getElementById('export-bill');
-
-            if (stateSelect) {
-                stateSelect.addEventListener('change', (e) => handleStateChange(e.target.value));
-            }
-
-            if(consumerTypeSelect){
-                 consumerTypeSelect.addEventListener('change', (e) => {
-                     if(e.target.value){
-                         nextStep2Btn.disabled = false;
-                         calculationData.consumerType = e.target.value;
-                     } else {
-                         nextStep2Btn.disabled = true;
-                     }
-                 });
-            }
+            document.getElementById('next-step-1').addEventListener('click', () => showStep(2));
+            document.getElementById('prev-step-2').addEventListener('click', () => showStep(1));
+            document.getElementById('next-step-2').addEventListener('click', () => showStep(3));
+            document.getElementById('prev-step-3').addEventListener('click', () => showStep(2));
             
-            if(directUnitsInput){
-                directUnitsInput.addEventListener('input', (e)=>{
-                    if(e.target.value && e.target.value > 0){
-                        calculateBtn.disabled = false;
-                    } else {
-                        calculateBtn.disabled = true;
-                    }
+            document.getElementById('new-calculation').addEventListener('click', resetCalculator);
+            
+            document.querySelectorAll('input[name="input-method"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('direct-input').classList.toggle('hidden', this.value !== 'direct');
+                    document.getElementById('readings-input').classList.toggle('hidden', this.value !== 'readings');
                 });
-            }
-
-            if (nextStep1Btn) nextStep1Btn.addEventListener('click', () => showStep(2));
-            if (prevStep2Btn) prevStep2Btn.addEventListener('click', () => showStep(1));
-            if (nextStep2Btn) nextStep2Btn.addEventListener('click', () => showStep(3));
-            if (prevStep3Btn) prevStep3Btn.addEventListener('click', () => showStep(2));
-            
-            if (calculateBtn) calculateBtn.addEventListener('click', calculateBill);
-            if (newCalculationBtn) newCalculationBtn.addEventListener('click', resetCalculator);
-            if (exportBtn) exportBtn.addEventListener('click', () => alert('Export functionality would be here.'));
+            });
         }
-        
-        function handleStateChange(stateCode){
-            const nextStep1Btn = document.getElementById('next-step-1');
+
+        function handleStateChange(stateCode) {
             if (stateCode) {
-                nextStep1Btn.disabled = false;
+                document.getElementById('next-step-1').disabled = false;
                 calculationData.state = applicationData.states.find(s => s.code === stateCode);
                 populateConsumerTypes(stateCode);
             } else {
-                nextStep1Btn.disabled = true;
+                document.getElementById('next-step-1').disabled = true;
             }
+        }
+
+        function handleConsumerTypeChange(e) {
+            if (e.target.value) {
+                document.getElementById('next-step-2').disabled = false;
+                calculationData.consumerType = e.target.value;
+            } else {
+                document.getElementById('next-step-2').disabled = true;
+            }
+        }
+
+        function handleUnitInputChange(e) {
+             document.getElementById('calculate-bill').disabled = !(e.target.value && e.target.value > 0);
         }
 
         function showStep(stepNum) {
@@ -524,70 +501,108 @@
         }
 
         function calculateBill() {
-            const units = parseInt(document.getElementById('direct-units').value, 10);
-            if(isNaN(units) || units <= 0) {
-                alert("Please enter a valid number of units.");
+            const unitsInput = document.getElementById('direct-units').value;
+            const units = parseInt(unitsInput, 10);
+            
+            if (isNaN(units) || units <= 0) {
+                alert("Please enter valid units.");
                 return;
             }
-            
             calculationData.units = units;
 
-            // This is a dummy calculation. Your real logic is much more complex.
-            const rate = 7.5; // Dummy rate
-            const fixedCharge = 110; // Dummy charge
-            const total = (units * rate) + fixedCharge;
+            const stateTariffs = applicationData.tariffs[calculationData.state.code];
+            const consumerTariffs = stateTariffs ? stateTariffs[calculationData.consumerType] : null;
             
-            displayResults(total);
+            if (!consumerTariffs) {
+                alert("Tariff data not found for the selected state and consumer type.");
+                return;
+            }
+
+            let remainingUnits = units;
+            let totalBill = 0;
+            let lastSlabEnd = 0;
+            
+            for (const slab of consumerTariffs) {
+                if (remainingUnits > 0) {
+                    const slabLimit = slab.slab === 'infinity' ? remainingUnits : slab.slab - lastSlabEnd;
+                    const unitsInSlab = Math.min(remainingUnits, slabLimit);
+                    totalBill += unitsInSlab * slab.rate;
+                    remainingUnits -= unitsInSlab;
+                    lastSlabEnd = slab.slab;
+                }
+            }
+            
+            totalBill += stateTariffs.fixedCharges || 0;
+            displayResults(totalBill);
         }
 
         function displayResults(total) {
             document.getElementById('total-amount').textContent = total.toFixed(2);
             
-            // Populate summary (dummy data for now)
-            document.querySelector('#results-section .bill-summary').innerHTML = `
-                <div class="summary-item">
-                    <span class="summary-label">State:</span>
-                    <span class="summary-value">${calculationData.state.name}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">Consumer Type:</span>
-                    <span class="summary-value">${calculationData.consumerType}</span>
-                </div>
-                 <div class="summary-item">
-                    <span class="summary-label">Units Consumed:</span>
-                    <span class="summary-value">${calculationData.units} kWh</span>
-                </div>
+            const summaryContainer = document.querySelector('#results-section .bill-summary');
+            summaryContainer.innerHTML = `
+                <div class="summary-item"><span class="summary-label">State:</span> <span class="summary-value">${calculationData.state.name}</span></div>
+                <div class="summary-item"><span class="summary-label">Consumer Type:</span> <span class="summary-value">${calculationData.consumerType}</span></div>
+                <div class="summary-item"><span class="summary-label">Units Consumed:</span> <span class="summary-value">${calculationData.units} kWh</span></div>
             `;
-
-            showStep('results');
             
-            // Draw chart (dummy data)
+            showStep('results');
+            drawResultChart();
+        }
+        
+        function drawResultChart() {
             const ctx = document.getElementById('slabChartCanvas').getContext('2d');
-            if(slabChart) slabChart.destroy();
+            if (slabChart) {
+                slabChart.destroy();
+            }
+            
+            // Dummy data for chart - in a real scenario, this would be based on calculation breakdown
+            const fixedCharges = applicationData.tariffs[calculationData.state.code].fixedCharges || 0;
+            const energyCharge = parseFloat(document.getElementById('total-amount').textContent) - fixedCharges;
+            
             slabChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Slab 1', 'Slab 2', 'Fixed Charges'],
+                    labels: ['Energy Charges', 'Fixed Charges'],
                     datasets: [{
-                        label: 'Bill Breakdown',
-                        data: [calculationData.units * 0.5 * 7.5, calculationData.units * 0.5 * 7.5, 110],
-                        backgroundColor: ['#007bff', '#28a745', '#dc3545']
+                        data: [energyCharge, fixedCharges],
+                        backgroundColor: ['#007bff', '#6c757d'],
+                        borderColor: '#fff',
+                        borderWidth: 2
                     }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
                 }
             });
         }
-        
-        function resetCalculator(){
+
+        function resetCalculator() {
             calculationData = {};
             document.getElementById('state-select').value = '';
             document.getElementById('consumer-type').innerHTML = '<option value="">Select consumer type...</option>';
             document.getElementById('direct-units').value = '';
+            
             document.getElementById('next-step-1').disabled = true;
             document.getElementById('next-step-2').disabled = true;
             document.getElementById('calculate-bill').disabled = true;
-            showStep(1);
-        }
 
+            const stateSelectionGroup = document.getElementById('state-selection-group');
+            if(stateSelectionGroup.style.display === 'none'){
+                // If it was hidden, auto-advance to step 2
+                showStep(2);
+            } else {
+                 showStep(1);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
