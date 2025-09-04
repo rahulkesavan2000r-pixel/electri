@@ -3,174 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowerCalc India - Calculator Widget</title>
-    <!-- Styles specifically for the calculator widget to ensure it looks right -->
+    <title>PowerCalc India - Widget</title>
+    <!-- This internal style makes the widget self-contained -->
     <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --font-family: 'Inter', sans-serif;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
-            background-color: #ffffff;
-            color: #333;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
         .calculator-container {
-            padding: 1.5rem;
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            width: 100%;
             max-width: 600px;
-            margin: 0 auto;
         }
-        .tabs {
+        .form-step {
             display: flex;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 1.5rem;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        .tab {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            font-weight: 600;
-            color: #555;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s ease-in-out;
-        }
-        .tab.active {
-            color: #007bff;
-            border-bottom-color: #007bff;
-        }
-        .tab-content {
+        .hidden {
             display: none;
         }
-        .tab-content.active {
-            display: block;
-        }
-        .input-group {
-            margin-bottom: 1.25rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-        input[type="number"], select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        .radio-group {
+        .form-group {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-        }
-        .radio-group label {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 0.5rem;
         }
-        .reading-inputs {
-            display: flex;
-            gap: 1rem;
+        .form-label {
+            font-weight: 600;
         }
-        button {
+        .form-control {
             width: 100%;
-            padding: 1rem;
-            background: linear-gradient(90deg, #007bff, #0056b3);
-            color: white;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.1s ease;
+            transition: all 0.2s ease;
         }
-        button:hover {
-            transform: scale(1.02);
+        .btn--primary {
+            background-color: var(--primary-color);
+            color: white;
         }
-        .results-container {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            display: none; /* Initially hidden */
+        .btn--primary:disabled {
+            background-color: #a0c7ff;
+            cursor: not-allowed;
         }
+        .btn--secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .radio-group { display: flex; gap: 1rem; }
+        .radio-option { display: flex; align-items: center; gap: 0.5rem; }
         .total-amount {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #007bff;
+            background-color: #e9f5ff;
+            padding: 1.5rem;
+            border-radius: 8px;
             text-align: center;
+            border: 1px solid #bde0fe;
         }
-        #breakdown-details {
-            margin-top: 1rem;
-            border-top: 1px solid #e0e0e0;
-            padding-top: 1rem;
+        .total-amount h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #0056b3;
         }
+        #state-info { padding: 1rem; background: #f1f3f5; border-radius: 8px; }
+        .state-highlight h4 { margin-top: 0; }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <!-- This is your FULL calculator structure, copied from index.html -->
+    <!-- This is the full calculator structure extracted from your index.html -->
     <div class="calculator-container" id="calculator-container">
-        <div class="tabs">
-            <div class="tab active" data-tab="domestic">Domestic</div>
-            <div class="tab" data-tab="commercial">Commercial</div>
+        <!-- Step 1: State Selection -->
+        <div id="step-1" class="form-step">
+            <div class="form-group" id="state-selection-group">
+                <label for="state-select" class="form-label">Select Your State/Union Territory</label>
+                <select id="state-select" class="form-control">
+                    <option value="">Select State/UT...</option>
+                </select>
+            </div>
+            <div id="state-info" class="state-info hidden"></div>
+            <button id="next-step-1" class="btn btn--primary" disabled>Next</button>
         </div>
 
-        <div class="tab-content active" id="domestic">
-            <div class="input-group" id="state-selection-group">
-                <label for="state-select">Select Your State</label>
-                <select id="state-select" name="state"></select>
+        <!-- Step 2: Consumer Type -->
+        <div id="step-2" class="form-step hidden">
+            <div class="form-group">
+                <label for="consumer-type" class="form-label">Consumer Type</label>
+                <select id="consumer-type" class="form-control">
+                    <option value="">Select consumer type...</option>
+                </select>
             </div>
-            
-            <div class="input-group">
-                <label>How do you want to calculate?</label>
+            <div>
+                <button id="prev-step-2" class="btn btn--secondary">Previous</button>
+                <button id="next-step-2" class="btn btn--primary" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Consumption Input -->
+        <div id="step-3" class="form-step hidden">
+            <div class="form-group">
+                <label class="form-label">Input Method</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="calc-method" value="units" checked> By Units</label>
-                    <label><input type="radio" name="calc-method" value="reading"> By Meter Reading</label>
-                </div>
-            </div>
-
-            <div id="units-input-container">
-                <div class="input-group">
-                    <label for="units-input">Enter Units Consumed</label>
-                    <input type="number" id="units-input" placeholder="e.g., 350" min="0">
-                </div>
-            </div>
-
-            <div id="reading-input-container" style="display: none;">
-                <div class="input-group reading-inputs">
-                    <div>
-                        <label for="prev-reading">Previous Reading</label>
-                        <input type="number" id="prev-reading" placeholder="e.g., 1200" min="0">
+                    <div class="radio-option">
+                        <input type="radio" id="direct-method" name="input-method" value="direct" checked>
+                        <label for="direct-method">Direct Units</label>
                     </div>
-                    <div>
-                        <label for="curr-reading">Current Reading</label>
-                        <input type="number" id="curr-reading" placeholder="e.g., 1550" min="0">
+                    <div class="radio-option">
+                        <input type="radio" id="readings-method" name="input-method" value="readings">
+                        <label for="readings-method">Meter Readings</label>
                     </div>
                 </div>
             </div>
-
-            <button id="calculate-btn">Calculate Bill</button>
-        </div>
-
-        <div class="tab-content" id="commercial">
-            <!-- Placeholder for Commercial Calculator -->
-            <p>Commercial calculator functionality coming soon.</p>
+            <div id="direct-input" class="input-section">
+                <div class="form-group">
+                    <label for="direct-units" class="form-label">Units Consumed (kWh)</label>
+                    <input type="number" id="direct-units" class="form-control" placeholder="Enter units" min="0">
+                </div>
+            </div>
+            <div id="readings-input" class="input-section hidden">
+                <div class="form-group">
+                    <label for="previous-reading" class="form-label">Previous Reading</label>
+                    <input type="number" id="previous-reading" class="form-control" placeholder="Previous" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="current-reading" class="form-label">Current Reading</label>
+                    <input type="number" id="current-reading" class="form-control" placeholder="Current" min="0">
+                </div>
+            </div>
+             <div>
+                <button id="prev-step-3" class="btn btn--secondary">Previous</button>
+                <button id="calculate-bill" class="btn btn--primary" disabled>Calculate Bill</button>
+            </div>
         </div>
         
-        <div class="results-container" id="results-container">
-            <h3>Estimated Bill Breakdown</h3>
-            <p>Total Amount: <span id="total-amount" class="total-amount"></span></p>
-            <div id="breakdown-details"></div>
-            <div class="export-options">
-                <button id="export-json-btn">Export as JSON</button>
+        <!-- Results Section -->
+        <div id="results-section" class="form-step hidden">
+            <h2>Your Estimated Bill</h2>
+            <div class="total-amount">
+                <h3>₹<span id="total-amount">0</span></h3>
             </div>
+            <div id="breakdown-table"></div>
+            <div class="chart-container" style="height: 250px;"><canvas id="slabChartCanvas"></canvas></div>
+            <div id="recommendations-grid"></div>
+            <button id="new-calculation" class="btn btn--secondary">New Calculation</button>
         </div>
     </div>
 
-    <!-- This links to your ORIGINAL, full app.js file -->
+    <!-- THIS IS THE CRUCIAL FIX: The leading "/" tells the browser to always find app.js in the root folder. -->
     <script src="/app.js"></script>
-
 </body>
 </html>
 
